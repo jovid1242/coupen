@@ -10,9 +10,22 @@ const checkMessage = async (ctx) => {
     if (text === 'Статус') {
         const collection = global.DB.collection("tg_users")
         return collection.findOne({ chat_id: ctx.message.chat.id }).then((user => {
-            return `у вас ${user.active_coupon} активный купон, ${user.active_coupon * 8}см`
+            return ctx.reply(`у вас ${user.active_coupon} активный купон, ${user.active_coupon * 8}см `)
         }))
     }
+
+    if (text === 'Вывод денег') {
+        const collection = global.DB.collection("tg_users")
+        return collection.findOne({ chat_id: ctx.message.chat.id }).then((user => {
+            return (
+                ctx.reply('Теперь администратор вам напишет, подождите 5 минут 🙏🙏🙏'),
+                ctx.telegram.sendMessage(927908860,
+                    `@${user.user_name} хочет сделать вывод кол-во купон ${user.active_coupon}, => ${user.active_coupon * 8}см 🙏`
+                )
+            )
+        }))
+    }
+
     if (isCupon(text)) {
         if (coupon !== false) {
             return ctx.reply(`Вы хотите активировать купон `, Extra.markup((markup) => {
@@ -26,7 +39,7 @@ const checkMessage = async (ctx) => {
     else {
         const active = await isActivation(text, ctx)
         if (active) {
-            return 'Купон активирован'
+            return ctx.reply('Купон активирован')
         }
     }
 }
