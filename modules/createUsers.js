@@ -1,11 +1,11 @@
 const User = require('../model/TgUser')
 const db = require('../db/config.js')
 
-const createUser = (ctx, coupon) => {
-    let userCoupon = coupon.split('').splice(0, 2).join('') + Math.floor(Math.random() * 9999)
+const createUser = (ctx) => {
+    let userCoupon = Math.floor(Math.random() * 99999 + 1000);
     var user = new User({
         chat_id: ctx.update.callback_query.message.chat.id,
-        admin: 1,
+        admin: 0,
         coupon: userCoupon,
         active_coupon: 0,
         first_name: ctx.update.callback_query.message.chat.first_name,

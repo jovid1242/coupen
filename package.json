@@ -1,7 +1,7 @@
 {
   "name": "couponbot",
   "version": "1.0.0",
-  "description": "js telegraf ",
+  "description": "js telegraf",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +14,7 @@
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.19",
     "nodemon": "^2.0.7",
-    "telegraf": "^4.1.2",
+    "telegraf": "3",
     "telegraf-inline-menu": "^6.2.0"
   }
 }

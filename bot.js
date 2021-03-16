@@ -1,36 +1,44 @@
-const { Telegraf } = require('telegraf')
+const Telegraf = require('telegraf')
+const Extra = require('telegraf/extra')
+const Markup = require('telegraf/markup')
 const { MenuTemplate, MenuMiddleware } = require('telegraf-inline-menu')
-const createUser = require('./modules/createUsers.js')
+const checkUser = require('./modules/checkUser.js')
+const menuTemplate = require('./keyboard/menu')
 const User = require('./model/TgUser')
 const db = require('./db/config.js')
 require('dotenv').config()
 
-const menuTemplate = new MenuTemplate(ctx => `Привет ${ctx.from.first_name}! нажми чтобы получить код купопа =)`)
+// console.log(ctx.update.callback_query.id);
 
-menuTemplate.interact('Получить код Купона', 'a', {
-    do: ctx => {
-        createUser(ctx, ctx.update.callback_query.id)
-        // console.log(ctx.update.callback_query.id);
-        ctx.telegram.deleteMessage(
-            ctx.update.callback_query.message.chat.id, ctx.update.callback_query.message.message_id
-        )
-        return false
-    }
-})
 
-const bot = new Telegraf(process.env.BOT_TOKEN2)
+const bot = new Telegraf(process.env.BOT_TOKEN)
 const menuMiddleware = new MenuMiddleware('/', menuTemplate)
 
-bot.start((ctx) => menuMiddleware.replyToContext(ctx))
+bot.start(async (ctx) => {
+    const check = await checkUser(ctx.message.chat.id)
+    if (check === null) {
+        menuMiddleware.replyToContext(ctx)
+    } else {
+        ctx.reply(`Ваш код ${check.coupon}`)
+    }
+})
+// bot.command('special', (ctx) => {
+//     return ctx.reply('Special buttons keyboard', Extra.markup((markup) => {
+//         return markup.resize()
+//             .keyboard([
+//                 markup.contactRequestButton('отправить контакт')
+//             ])
+//     }))
+// })
+// bot.on('contact', (ctx) => {
+//     console.log(ctx.update.message.contact);
+// })
 bot.on('message', (ctx) => {
     ctx.reply("Выберите действие.")
 })
 bot.help((ctx) => ctx.reply(`dos't held  `))
-bot.hears('hi', (ctx) => {
-    ctx.reply('Hey there')
-})
+bot.use(Telegraf.log())
 bot.use(menuMiddleware)
-
 bot.launch()
 
 // Enable graceful stop
