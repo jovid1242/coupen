@@ -4,6 +4,7 @@ const menuTemplate = require('./keyboard/menu')
 const User = require('./model/TgUser')
 const checkUser = require('./modules/checkUser')
 const isAdmin = require('./modules/isAdmin')
+const updateCoupon = require('./modules/updateCoupon')
 const db = require('./db/config.js')
 require('dotenv').config()
 
@@ -20,9 +21,10 @@ bot.start(async (ctx) => {
 })
 
 bot.on('message', async (ctx) => {
-    const admin = await isAdmin(ctx.message.chat.id, ctx.message.text)
-    // console.log(ctx.message.text)
-    ctx.reply(admin)
+    const isadmin = await isAdmin(ctx.message.chat.id, ctx.message.text)
+    const update = await updateCoupon(Number(isadmin))
+    // console.log(update);
+    ctx.reply(update)
 })
 bot.help((ctx) => ctx.reply(`dos't held  `))
 // bot.use(Telegraf.log())
