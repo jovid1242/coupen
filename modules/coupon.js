@@ -1,4 +1,4 @@
-const isAdmin = (chat_id, coupon) => {
+const Coupon = (chat_id, coupon) => {
     const collection = global.DB.collection("tg_users")
     return collection.findOne({ chat_id: chat_id })
         .then((user) => {
@@ -10,11 +10,9 @@ const isAdmin = (chat_id, coupon) => {
                 } else {
                     return 'код не правильно'
                 }
-            } else {
-                return '🤪'
             }
         })
 }
 
 
-module.exports = isAdmin
+module.exports = Coupon
