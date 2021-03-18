@@ -5,9 +5,7 @@ const { MenuTemplate, MenuMiddleware } = require('telegraf-inline-menu')
 const menuTemplate = require('./keyboard/button')
 const User = require('./model/TgUser')
 const checkUser = require('./modules/checkUser')
-const Coupon = require('./modules/coupon')
-const isCupon = require('./modules/isCupon')
-const isActivation = require('./modules/isActivation')
+const checkMessage = require('./modules/checkMessage')
 const db = require('./db/config.js')
 require('dotenv').config()
 
@@ -19,27 +17,15 @@ bot.start(async (ctx) => {
     if (check === null) {
         menuMiddleware.replyToContext(ctx)
     } else {
-        ctx.reply(`Добро пожаловать ${ctx.from.first_name}, Ваш код купона ${check.coupon}`)
+        ctx.reply(`Добро пожаловать ${ctx.from.first_name}, Ваш код купона ${check.coupon}`, Extra.markup((markup) => {
+            return markup.resize().keyboard([(`Статус`)])
+        }))
     }
 })
 
 bot.on('message', async (ctx) => {
-    const text = ctx.message.text
-    if (isCupon(text)) {
-        const coupon = await Coupon(ctx.message.chat.id, text)
-        return ctx.reply(`Вы хотите активировать купон `, Extra.markup((markup) => {
-            return markup.resize()
-                .keyboard([
-                    (`Активировать ${coupon}`)
-                ])
-        }))
-    }
-
-    if (isActivation(text)) {
-        ctx.reply('active')
-        return
-    }
-    return
+    const checked = await checkMessage(ctx)
+    ctx.reply(checked)
 })
 bot.help((ctx) => ctx.reply(`dos't held  `))
 // bot.use(Telegraf.log())

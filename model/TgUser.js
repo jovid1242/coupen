@@ -12,7 +12,7 @@ const userSchema = new Schema({
         type: Number, required: true
     },
     active_coupon: {
-        type: String, required: true
+        type: Number, required: true
     },
     first_name: {
         type: String, required: true

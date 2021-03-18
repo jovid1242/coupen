@@ -11,6 +11,7 @@ const Coupon = (chat_id, coupon) => {
                     return 'код не правильно'
                 }
             }
+            return false
         })
 }
 
