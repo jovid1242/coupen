@@ -7,8 +7,6 @@ const Coupon = (chat_id, coupon) => {
                     if (coupon.length === 5) {
                         return coupon
                     }
-                } else {
-                    return 'код не правильно'
                 }
             }
             return false

@@ -6,6 +6,7 @@ const Coupon = require('./coupon')
 
 const checkMessage = async (ctx) => {
     const text = ctx.message.text
+    const coupon = await Coupon(ctx.message.chat.id, text)
     if (text === 'Статус') {
         const collection = global.DB.collection("tg_users")
         return collection.findOne({ chat_id: ctx.message.chat.id }).then((user => {
@@ -13,7 +14,6 @@ const checkMessage = async (ctx) => {
         }))
     }
     if (isCupon(text)) {
-        const coupon = await Coupon(ctx.message.chat.id, text)
         if (coupon !== false) {
             return ctx.reply(`Вы хотите активировать купон `, Extra.markup((markup) => {
                 return markup.resize()

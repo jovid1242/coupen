@@ -14,12 +14,12 @@ const menuMiddleware = new MenuMiddleware('/', menuTemplate)
 
 bot.start(async (ctx) => {
     const check = await checkUser(ctx.message.chat.id)
-    if (check === null) {
-        menuMiddleware.replyToContext(ctx)
-    } else {
-        ctx.reply(`Добро пожаловать ${ctx.from.first_name}, Ваш код купона ${check.coupon}`, Extra.markup((markup) => {
-            return markup.resize().keyboard([(`Статус`)])
-        }))
+    if (check === null) { menuMiddleware.replyToContext(ctx) } else {
+        if (check === true) { ctx.reply('Привет Админ отправьте мне код купона!') } else {
+            ctx.reply(`Добро пожаловать ${ctx.from.first_name}, Ваш код купона ${check.coupon}`, Extra.markup((markup) => {
+                return markup.resize().keyboard([(`Статус`)])
+            }))
+        }
     }
 })
 
